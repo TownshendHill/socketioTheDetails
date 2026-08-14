@@ -1,15 +1,13 @@
 //Where all our socket stuff will go
-const io = require('../servers').io;
 //oh... we need express, get app, but only put what we need to inside of our socket stuff
-const app = require('../servers').app;
-const checkForOrbCollisions = require('./checkCollisions').checkForOrbCollisions;
-const checkForPlayerCollisions = require('./checkCollisions').checkForPlayerCollisions;
+import { app, io } from '../servers.js';
+import { checkForOrbCollisions, checkForPlayerCollisions } from './checkCollisions.js';
 
 //================CLASSES================
-const Player = require('./classes/Player');
-const PlayerConfig = require('./classes/PlayerConfig');
-const PlayerData = require('./classes/PlayerData');
-const Orb = require('./classes/Orb');
+import Player from './classes/Player.js';
+import PlayerConfig from './classes/PlayerConfig.js';
+import PlayerData from './classes/PlayerData.js';
+import Orb from './classes/Orb.js';
 //=======================================
 
 //make an orbs array that will host all 500/5000 NOT PLAYER orbs.
@@ -65,7 +63,9 @@ io.on('connect',(socket)=>{
         if(!player.playerConfig){
             return;
         }
-        speed = player.playerConfig.speed;
+        // NOTE: must be declared - ES modules are always strict mode,
+        // so an undeclared assignment here would throw a ReferenceError
+        const speed = player.playerConfig.speed;
         const xV = player.playerConfig.xVector = data.xVector;
         const yV = player.playerConfig.yVector = data.yVector;
 

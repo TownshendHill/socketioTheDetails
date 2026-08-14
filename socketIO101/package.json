@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "basics.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:basics": "node --watch basics.js",
+    "dev:chat": "node --watch chat.js",
+    "dev:docs": "node --watch serverDocs.js"
   },
   "keywords": [],
   "author": "",

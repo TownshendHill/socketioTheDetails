@@ -1,5 +1,4 @@
 //The purpose of expressMain is to be the entrypoint for all Express stuff
-const app = require('../servers').app;
-const io = require('../servers').io;
+import { app, io } from '../servers.js';
 
-module.exports = app;
+export default app;

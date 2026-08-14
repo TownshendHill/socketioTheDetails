@@ -2,9 +2,11 @@
   "name": "socketio201",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "namespaces/namespaces.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:namespaces": "node --watch namespaces/namespaces.js",
+    "dev:slack": "node --watch slackClone/slack.js"
   },
   "keywords": [],
   "author": "",

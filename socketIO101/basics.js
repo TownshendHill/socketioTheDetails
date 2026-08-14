@@ -1,12 +1,14 @@
-//2 3rd party modules from npm 
-const express = require('express');
-const app = express();
-const socketio = require('socket.io')
+//2 3rd party modules from npm
+import express from 'express';
+import path from 'node:path';
+import { Server } from 'socket.io';
 
-app.use(express.static(__dirname + '/public'));
+const app = express();
+
+app.use(express.static(path.join(import.meta.dirname, 'public')));
 
 const expressServer = app.listen(8000);
-const io = socketio(expressServer)
+const io = new Server(expressServer);
 
 io.on('connection',(socket)=>{
     console.log(socket.id,"has connected")

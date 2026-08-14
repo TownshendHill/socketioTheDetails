@@ -8,7 +8,9 @@ const checkForOrbCollisions = (pData,pConfig, orbs, settings)=>{
             && pData.locY + pData.radius + orb.radius > orb.locY 
             && pData.locY < orb.locY + pData.radius + orb.radius){
         // Pythagoras test(circle)
-            distance = Math.sqrt(
+            // NOTE: must be declared - ES modules are always strict mode,
+            // so an undeclared assignment here would throw a ReferenceError
+            const distance = Math.sqrt(
                 ((pData.locX - orb.locX) * (pData.locX - orb.locX)) + 
                 ((pData.locY - orb.locY) * (pData.locY - orb.locY))	
                 );
@@ -28,7 +30,6 @@ const checkForOrbCollisions = (pData,pConfig, orbs, settings)=>{
                 }
                 // can't hit more than one orb on a tock so break and return
                 return i;
-                break;
             }
         }
     };
@@ -50,7 +51,8 @@ const checkForPlayerCollisions = (pData,pConfig,players,playersForUsers,playerId
             && pData.locY < pLocy + pData.radius + pR){
                 // console.log("Hit square test!");
         // Pythagoras test
-                distance = Math.sqrt(
+                // NOTE: must be declared - see the comment above
+                const distance = Math.sqrt(
                     ((pData.locX - pLocx) * (pData.locX - pLocx)) + 
                     ((pData.locY - pLocy) * (pData.locY - pLocy))	
                     );      
@@ -73,7 +75,6 @@ const checkForPlayerCollisions = (pData,pConfig,players,playersForUsers,playerId
                         players.splice(i, 1,{}); //remove player from server players array
                         playersForUsers.splice(i,1,{}) //remove player from players array used by clients
                         return collisionData; //essentially a return statement (because I could't get it work without a promise?)
-                        break;
                     }
                     
                     //This code could check to see if it the player who tocked was hit.
@@ -87,4 +88,4 @@ const checkForPlayerCollisions = (pData,pConfig,players,playersForUsers,playerId
     return null;
 }
 
-module.exports = {checkForOrbCollisions, checkForPlayerCollisions}
+export { checkForOrbCollisions, checkForPlayerCollisions };

@@ -22,4 +22,4 @@ class PlayerData{
 
 }
 
-module.exports = PlayerData;
+export default PlayerData;

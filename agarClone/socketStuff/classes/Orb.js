@@ -17,4 +17,4 @@ class Orb{
 
 }
 
-module.exports = Orb;
+export default Orb;

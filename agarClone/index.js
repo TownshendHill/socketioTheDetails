@@ -1,4 +1,4 @@
 
-//this is the file we will run with Node/nodemon
-require('./expressStuff/expressMain')
-require('./socketStuff/socketMain');
+//this is the file we will run with Node (node --watch for auto-restart)
+import './expressStuff/expressMain.js';
+import './socketStuff/socketMain.js';

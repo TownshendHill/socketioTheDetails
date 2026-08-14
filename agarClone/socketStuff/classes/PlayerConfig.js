@@ -9,4 +9,4 @@ class PlayerConfig{
     }
 }
 
-module.exports = PlayerConfig;
+export default PlayerConfig;
