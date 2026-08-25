@@ -1,5 +1,6 @@
 import { io, type Socket } from 'socket.io-client';
 import type { ClientToServerEvents, ServerToClientEvents } from '../contract/events.ts';
+import { joinNs } from './joinNs.ts';
 
 // const userName = prompt('What is your name?');
 // const password = prompt('What is your password?');
@@ -22,9 +23,11 @@ socket.on('connect', () => {
 
 // listen for the nsList event from the server which gives us the namespaces
 socket.on('nsList', (nsData) => {
+    const lastNs = localStorage.getItem('lastNs');
     console.log('Data from server: ', nsData);
     const nsDiv = document.querySelector('.namespaces') as HTMLDivElement;
-
+ 
+    nsDiv.innerHTML = ''; // Clear existing namespaces, on initial connect and on retries
     nsData.forEach((ns) => {
         nsDiv.innerHTML += `<div class="namespace" data-ns="${ns.endpoint}">
             <img src="${ns.image}" />
@@ -35,19 +38,16 @@ socket.on('nsList', (nsData) => {
     Array.from(document.getElementsByClassName('namespace')).forEach((element) => {
         console.log(element);
         
-        element.addEventListener('click', (e) => {
-            const nsEndpoint = element.getAttribute('data-ns');
-            console.log('Namespace clicked: ', nsEndpoint);
-
-            const clickedNs = nsData.find((ns) => ns.endpoint === nsEndpoint);
-            const rooms = clickedNs?.rooms || [];
-
-            let roomsList = document.querySelector('.room-list') as HTMLDivElement;
-            roomsList.innerHTML = ''; // Clear existing rooms
-
-            rooms.forEach((room) => {
-                roomsList.innerHTML += `<li><span class="glyphicon glyphicon-lock"></span> ${room.roomTitle}</li>`;
-            });
+        element.addEventListener('click', () => {
+            joinNs(element, nsData);
         });
     });
+
+    // Restore the last namespace if it still exists, otherwise fall back to the first.
+    // Covers both a stale lastNs and an empty namespace list.
+    const target =
+        [...nsDiv.children].find((el) => el.getAttribute('data-ns') === lastNs)
+        ?? nsDiv.firstElementChild;
+
+    if (target) joinNs(target, nsData);
 });
