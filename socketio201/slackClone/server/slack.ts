@@ -2,10 +2,10 @@ import express from 'express';
 import path from 'node:path';
 import { Server, type Socket } from 'socket.io';
 import { namespaces } from './data/namespaces.ts';
-import type { ClientToServerEvents, ServerToClientEvents } from './shared/events.ts';
+import type { ClientToServerEvents, ServerToClientEvents } from '../contract/events.ts';
 
 const app = express();
-app.use(express.static(path.join(import.meta.dirname, 'public')));
+app.use(express.static(path.join(import.meta.dirname, '..', 'public')));
 
 const expressServer = app.listen(9000);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(expressServer);

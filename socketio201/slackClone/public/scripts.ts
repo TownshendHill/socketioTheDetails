@@ -1,5 +1,5 @@
 import { io, type Socket } from 'socket.io-client';
-import type { ClientToServerEvents, ServerToClientEvents } from '../shared/events.ts';
+import type { ClientToServerEvents, ServerToClientEvents } from '../contract/events.ts';
 
 // const userName = prompt('What is your name?');
 // const password = prompt('What is your password?');
@@ -26,9 +26,28 @@ socket.on('nsList', (nsData) => {
     const nsDiv = document.querySelector('.namespaces') as HTMLDivElement;
 
     nsData.forEach((ns) => {
-        nsDiv.innerHTML += `<div class="namespace" data-ns="${ns.name}">
+        nsDiv.innerHTML += `<div class="namespace" data-ns="${ns.endpoint}">
             <img src="${ns.image}" />
         </div>`;
     });
     
+
+    Array.from(document.getElementsByClassName('namespace')).forEach((element) => {
+        console.log(element);
+        
+        element.addEventListener('click', (e) => {
+            const nsEndpoint = element.getAttribute('data-ns');
+            console.log('Namespace clicked: ', nsEndpoint);
+
+            const clickedNs = nsData.find((ns) => ns.endpoint === nsEndpoint);
+            const rooms = clickedNs?.rooms || [];
+
+            let roomsList = document.querySelector('.room-list') as HTMLDivElement;
+            roomsList.innerHTML = ''; // Clear existing rooms
+
+            rooms.forEach((room) => {
+                roomsList.innerHTML += `<li><span class="glyphicon glyphicon-lock"></span> ${room.roomTitle}</li>`;
+            });
+        });
+    });
 });

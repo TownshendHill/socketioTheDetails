@@ -1,16 +1,14 @@
-export interface Message {
-    text: string;
-    time: number;
-    userName: string;
-    avatar: string;
-}
+import type { MessageData, RoomData } from '../../contract/dto.ts';
 
-export class Room {
+/* `implements RoomData` makes the compiler enforce that this class matches
+   the wire shape. Add a field to RoomData and this class fails to compile
+   until it is added here too — the two can no longer drift apart. */
+export class Room implements RoomData {
     roomId: number;
     roomTitle: string;
     namespaceId: number;
     privateRoom: boolean;
-    history: Message[] = [];
+    history: MessageData[] = [];
 
     constructor(roomId: number, roomTitle: string, namespaceId: number, privateRoom = false) {
         this.roomId = roomId;
@@ -19,7 +17,7 @@ export class Room {
         this.privateRoom = privateRoom;
     }
 
-    addMessage(message: Message) {
+    addMessage(message: MessageData) {
         this.history.push(message);
     }
 

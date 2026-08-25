@@ -7,18 +7,18 @@ const linuxNs = new Namespace(2, 'Linux', 'https://upload.wikimedia.org/wikipedi
 
 wikiNs.addRoom(new Room(0, 'New Articles', 0));
 wikiNs.addRoom(new Room(1, 'Editors', 0));
-wikiNs.addRoom(new Room(1, 'Other', 0));
+wikiNs.addRoom(new Room(2, 'Other', 0));
 
 
 mozNs.addRoom(new Room(0, 'Firefox', 1));
 mozNs.addRoom(new Room(1, 'SeaMonkey', 1));
-mozNs.addRoom(new Room(1, 'SpiderMonkey', 1));
-mozNs.addRoom(new Room(1, 'Rust', 1));
+mozNs.addRoom(new Room(2, 'SpiderMonkey', 1));
+mozNs.addRoom(new Room(3, 'Rust', 1));
 
 linuxNs.addRoom(new Room(0, 'Debian', 2));
 linuxNs.addRoom(new Room(1, 'Red Hat', 2));
-linuxNs.addRoom(new Room(1, 'Ubuntu', 2));
-linuxNs.addRoom(new Room(1, 'Mac OS', 2));
+linuxNs.addRoom(new Room(2, 'Ubuntu', 2));
+linuxNs.addRoom(new Room(3, 'Mac OS', 2));
 
 
 export const namespaces = [wikiNs, mozNs, linuxNs];

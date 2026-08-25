@@ -16,5 +16,5 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["slackClone/public/**/*.ts", "slackClone/shared/**/*.ts"]
+  "include": ["slackClone/public/**/*.ts", "slackClone/contract/**/*.ts"]
 }

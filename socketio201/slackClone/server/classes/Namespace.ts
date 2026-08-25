@@ -1,8 +1,10 @@
-/* `import type` because Room is only used as a TYPE here, never called.
-   It is erased at build, so this file has no runtime dependency on Room.ts. */
+import type { NamespaceData } from '../../contract/dto.ts';
 import type { Room } from './Room.ts';
 
-export class Namespace {
+/* rooms is typed as Room[] (the class) rather than RoomData[] (the shape),
+   which is still valid because Room implements RoomData. Server-side code
+   gets addMessage(); the client only ever sees the plain data. */
+export class Namespace implements NamespaceData {
     id: number;
     name: string;
     image: string;
