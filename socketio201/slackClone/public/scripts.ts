@@ -1,8 +1,13 @@
 import { io, type Socket } from 'socket.io-client';
 import type { ClientToServerEvents, ServerToClientEvents } from '../shared/events.ts';
 
-const userName = prompt('What is your name?');
-const password = prompt('What is your password?');
+// const userName = prompt('What is your name?');
+// const password = prompt('What is your password?');
+
+// temp: remove prompt for now, just hardcode a user name and password for testing
+const userName = "Rob";
+const password = "1234";
+
 
 /* Note the generics are FLIPPED compared to the server.
    Socket<ListenEvents, EmitEvents> from each side's point of view:
