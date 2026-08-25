@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "dev:namespaces": "node --watch namespaces/namespaces.ts",
-    "dev:slack": "node --watch slackClone/slack.ts",
-    "typecheck": "tsc --noEmit",
+    "dev:slack": "concurrently -n build,server -c cyan,green \"npm:build:client -- --watch\" \"node --watch slackClone/slack.ts\"",
+    "build:client": "esbuild slackClone/public/scripts.ts --bundle --outfile=slackClone/public/scripts.js",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.client.json --noEmit",
     "typecheck:watch": "tsc --noEmit --watch"
   },
   "keywords": [],
@@ -15,11 +16,14 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.2.1",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.2.0",
+    "concurrently": "^10.0.5",
+    "esbuild": "^0.28.2",
     "typescript": "^7.0.2"
   }
 }
