@@ -17,8 +17,15 @@ io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>)
     socket.emit('welcome', { text: 'Welcome to the server!' });
 
     socket.on('clientConnect', (dataFromClient) => {
-        console.log('Data from client: ', dataFromClient);
+        console.log('Server on ClientConnect: ', dataFromClient);
+        console.log('Server emit nsList');
+        socket.emit('nsList', namespaces);
     });
 
-    socket.emit('nsList', namespaces);
+});
+
+namespaces.forEach((ns) => {
+    io.of(ns.endpoint).on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
+        console.log(`New client connected to namespace ${ns.endpoint}: ${socket.id}`); 
+    });
 });

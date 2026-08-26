@@ -10,28 +10,34 @@ const userName = "Rob";
 const password = "1234";
 
 
-/* Note the generics are FLIPPED compared to the server.
-   Socket<ListenEvents, EmitEvents> from each side's point of view:
-     server listens to client events, emits server events
-     client listens to server events, emits client events */
+// always join the main anmespace, because that is the source for other namespaces.
 const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000');
+// const socket2: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000/wiki');
+// const socket3: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000/mozilla');
+// const socket4: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000/linux');
+
 
 socket.on('connect', () => {
-    console.log('connected 2');
+    console.log('Client on connect');
+    console.log('Client emit clientConnect');
     socket.emit('clientConnect', { text: 'Hello from the client!' });
 });
 
 // listen for the nsList event from the server which gives us the namespaces
 socket.on('nsList', (nsData) => {
     const lastNs = localStorage.getItem('lastNs');
-    console.log('Data from server: ', nsData);
+    console.log('Client on nsList: ', nsData);
     const nsDiv = document.querySelector('.namespaces') as HTMLDivElement;
  
     nsDiv.innerHTML = ''; // Clear existing namespaces, on initial connect and on retries
     nsData.forEach((ns) => {
+        // update the HTML with each ns
         nsDiv.innerHTML += `<div class="namespace" data-ns="${ns.endpoint}">
             <img src="${ns.image}" />
         </div>`;
+
+        // join this namespace with io()
+        io(`http://localhost:9000${ns.endpoint}`);
     });
     
 
