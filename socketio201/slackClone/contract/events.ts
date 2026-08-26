@@ -11,4 +11,5 @@ export interface ClientToServerEvents {
 export interface ServerToClientEvents {
     welcome: (newMessage: { text: string }) => void;
     nsList: (namespaces: NamespaceData[]) => void;
+    nsChange: (namespace: NamespaceData) => void;
 }
