@@ -89,6 +89,10 @@ erased at build and exists only so both sides agree).
 - [ ] `<h6"` stray quote in `slack.html`
 - [ ] `welcome` is emitted by the server with no client handler — dead contract entry
 - [ ] `userName` / `password` collected but never sent
+- [ ] **circular import**: `scripts.ts` → `joinNs.ts` → `joinRoom.ts` → `scripts.ts`.
+      Works today (the array is only read on click, after every module has evaluated),
+      but breaks if anything ever reads it at module top level. Fix: move
+      `nameSpaceSockets` into its own `sockets.ts` registry that both import.
 
 ---
 

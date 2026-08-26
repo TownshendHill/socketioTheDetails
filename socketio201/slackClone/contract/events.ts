@@ -6,6 +6,7 @@ import type { NamespaceData } from './dto.ts';
 
 export interface ClientToServerEvents {
     clientConnect: (dataFromClient: { text: string }) => void;
+    joinRoom: (data: { roomTitle: string }) => void;
 }
 
 export interface ServerToClientEvents {

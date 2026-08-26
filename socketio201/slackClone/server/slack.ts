@@ -38,7 +38,13 @@ namespaces.forEach((ns) => {
     io.of(ns.endpoint).on(
         'connection',
         (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
-            console.log(`New client connected to namespace ${ns.endpoint}: ${socket.id}`);
+            socket.on('joinRoom', ({ roomTitle }) => {
+                // need to fetch the history
+                console.log('Server on joinRoom: ', roomTitle);
+
+                // join the room
+                socket.join(roomTitle);
+            });
         },
     );
 });

@@ -16,7 +16,7 @@ const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://lo
 // const socket4: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000/linux');
 
 // sockets will be put into this array, in the index of their ns.id
-const nameSpaceSocket = [] as Socket<ServerToClientEvents, ClientToServerEvents>[];
+export const nameSpaceSockets = [] as Socket<ServerToClientEvents, ClientToServerEvents>[];
 const listeners = {
     // sparse array indexed by ns.id: true once a handler is attached for that socket
     nsChange: [] as boolean[],
@@ -24,7 +24,7 @@ const listeners = {
 
 const addListeners = (nsId: number) => {
     if (!listeners.nsChange[nsId]) {
-        nameSpaceSocket[nsId].on('nsChange', (updatedNs) => {
+        nameSpaceSockets[nsId].on('nsChange', (updatedNs) => {
             console.log('Client on nsChange', updatedNs);
         });
         listeners.nsChange[nsId] = true;
@@ -55,9 +55,9 @@ socket.on('nsList', (nsData) => {
         // if the connection has already been established, it will reconnect and remain in its spot
 
         // join this namespace with io() if not already connected
-        if (!nameSpaceSocket[ns.id]) {
+        if (!nameSpaceSockets[ns.id]) {
             // there is no socket at this nsId, so make a new connection!
-            nameSpaceSocket[ns.id] = io(`http://localhost:9000${ns.endpoint}`);
+            nameSpaceSockets[ns.id] = io(`http://localhost:9000${ns.endpoint}`);
         }
         addListeners(ns.id);
     });
