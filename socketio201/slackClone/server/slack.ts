@@ -63,6 +63,19 @@ namespaces.forEach((ns) => {
                 const room = ns.rooms.find((r) => r.roomTitle === roomTitle);
                 ackCallBack({ numUsers: socketCount });
             });
+
+            socket.on('newMessageToRoom', (message) => {
+                console.log('Server on newMessageToRoom: ', message);
+
+                // broadcast this to all the connect clients... this room only
+                // how can we find out what room THIS socket is in?
+                // socket.rooms is a Set, and it ALWAYS contains the socket's own id room.
+                // The room we want is the other one.
+                const currentRoom = [...socket.rooms].find((r) => r !== socket.id);
+                if (!currentRoom) return;
+                // //send out this message to everyone including the sender
+                io.of(ns.endpoint).in(currentRoom).emit('newMessageToRoom', message);
+            });
         },
     );
 });

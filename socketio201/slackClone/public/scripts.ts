@@ -20,14 +20,49 @@ export const nameSpaceSockets = [] as Socket<ServerToClientEvents, ClientToServe
 const listeners = {
     // sparse array indexed by ns.id: true once a handler is attached for that socket
     nsChange: [] as boolean[],
+    messageToRoom: [] as boolean[],
 };
 
+// a global variable we can update when the user clicks a new namespace
+// we will use it to broadcast across the app (redux would be great here)
+export let selectedNsId = 0;
+
+// imported bindings are read-only, so other modules cannot assign to selectedNsId
+// directly. They call this instead; reads of selectedNsId still see the new value.
+export const setSelectedNsId = (id: number) => {
+    selectedNsId = id;
+};
+
+// add a submit hanlder for our form, keep the browser from submitting
+document.querySelector('#message-form')!.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // grab the value from the input box
+    const newMessage = (document.querySelector('#user-message') as HTMLInputElement).value;
+    console.log('Client emit newMessageToServer: ', newMessage, selectedNsId);
+
+    nameSpaceSockets[selectedNsId].emit('newMessageToRoom', {
+        text: newMessage,
+        userName,
+        avatar: 'https://via.placeholder.com/30',
+        date: Date.now(),
+    });
+});
+
+// addListeners job is to manage all listenes added to all namespaces
+// the prevents listeneres being added multiple times when the user clicks the same namespace multiple times and makes life better to us devs
 const addListeners = (nsId: number) => {
     if (!listeners.nsChange[nsId]) {
         nameSpaceSockets[nsId].on('nsChange', (updatedNs) => {
             console.log('Client on nsChange', updatedNs);
         });
         listeners.nsChange[nsId] = true;
+    }
+
+    if (!listeners.messageToRoom[nsId]) {
+        nameSpaceSockets[nsId].on('newMessageToRoom', (newMessage) => {
+            console.log('Client on newMessageToRoom: ', newMessage);
+        });
+        listeners.messageToRoom[nsId] = true;
     }
 };
 

@@ -6,7 +6,7 @@ import type { MessageData, NamespaceData } from './dto.ts';
 
 export interface ClientToServerEvents {
     clientConnect: (dataFromClient: { text: string }) => void;
-
+    newMessageToRoom: (data: MessageData) => void;
     /* An ack is declared as the LAST parameter of the handler signature.
        Client: emit('joinRoom', data, (ack) => ...)
        Server: socket.on('joinRoom', (data, ack) => ack(...)) */
@@ -17,4 +17,5 @@ export interface ServerToClientEvents {
     welcome: (newMessage: { text: string }) => void;
     nsList: (namespaces: NamespaceData[]) => void;
     nsChange: (namespace: NamespaceData) => void;
+    newMessageToRoom: (newMessage: MessageData) => void;
 }

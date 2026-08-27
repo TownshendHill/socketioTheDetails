@@ -68,6 +68,50 @@ erased at build and exists only so both sides agree).
 
 ---
 
+## The whole conversation
+
+Every message this app sends, in order. Nothing else happens over the socket.
+
+```mermaid
+sequenceDiagram
+    participant B as Browser
+    participant S as Server
+    B->>S: connect to /
+    Note over S: io.on('connection')
+    B->>S: emit clientConnect
+    S-->>B: emit nsList  (all namespaces, each with its rooms)
+    Note over B: render namespace icons
+    B->>S: io() x3 - connect to /wiki, /mozilla, /linux
+    Note over S: io.of(ns).on('connection')
+    Note over B: user clicks a namespace
+    Note over B: joinNs() renders the room list - NO server call
+    Note over B: user clicks a room
+    B->>S: emit joinRoom { roomTitle }
+    Note over S: socket.join(roomTitle)
+    S-->>B: ack { numUsers }
+    Note over B: render the user count
+```
+
+The surprising one: **clicking a namespace does not talk to the server.** Every
+namespace and all its rooms arrived in the single `nsList` payload at startup, so
+switching namespaces is pure DOM work against data already in memory.
+
+### Which file does what
+
+| File | Role |
+|---|---|
+| `public/scripts.ts` | connects to `/`, receives `nsList`, opens the namespace sockets, wires namespace clicks |
+| `public/joinNs.ts` | renders the room list for one namespace, wires room clicks |
+| `public/joinRoom.ts` | emits `joinRoom`, handles the ack |
+| `contract/events.ts` | the event names and payloads both sides agree on |
+| `server/slack.ts` | all server handlers, for `/` and for every namespace |
+
+Everything the browser sends lives in the three `public/*.ts` files; everything the
+server answers lives in one file. There is no service layer between them, which is
+why following a single round trip means jumping between files.
+
+---
+
 ## TODO
 
 ### Slack clone

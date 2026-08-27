@@ -4,7 +4,7 @@
 
 export interface MessageData {
     text: string;
-    time: number;
+    date: number;
     userName: string;
     avatar: string;
 }
