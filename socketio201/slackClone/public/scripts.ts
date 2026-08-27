@@ -1,6 +1,7 @@
 import { io, type Socket } from 'socket.io-client';
 import type { ClientToServerEvents, ServerToClientEvents } from '../contract/events.ts';
 import { joinNs } from './joinNs.ts';
+import { buildMessageHtml } from './buildMessageHtml.ts';
 
 // const userName = prompt('What is your name?');
 // const password = prompt('What is your password?');
@@ -45,7 +46,10 @@ document.querySelector('#message-form')!.addEventListener('submit', (e) => {
         userName,
         avatar: 'https://via.placeholder.com/30',
         date: Date.now(),
+        namespaceId: selectedNsId,
     });
+
+    (document.querySelector('#user-message') as HTMLInputElement).value = '';
 });
 
 // addListeners job is to manage all listenes added to all namespaces
@@ -61,6 +65,7 @@ const addListeners = (nsId: number) => {
     if (!listeners.messageToRoom[nsId]) {
         nameSpaceSockets[nsId].on('newMessageToRoom', (newMessage) => {
             console.log('Client on newMessageToRoom: ', newMessage);
+            document.querySelector('#messages')!.innerHTML += buildMessageHtml(newMessage);
         });
         listeners.messageToRoom[nsId] = true;
     }

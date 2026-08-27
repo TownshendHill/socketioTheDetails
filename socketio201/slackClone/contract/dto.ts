@@ -7,6 +7,7 @@ export interface MessageData {
     date: number;
     userName: string;
     avatar: string;
+    namespaceId?: number; // optional, because the server doesn't send it to the client
 }
 
 export interface RoomData {

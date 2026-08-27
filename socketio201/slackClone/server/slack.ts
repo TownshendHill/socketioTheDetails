@@ -38,8 +38,11 @@ namespaces.forEach((ns) => {
     io.of(ns.endpoint).on(
         'connection',
         (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
-            socket.on('joinRoom', async ({ roomTitle }, ackCallBack) => {
+            socket.on('joinRoom', async ({ roomTitle, namespaceId }, ackCallBack) => {
                 console.log('Server on joinRoom: ', roomTitle);
+                const thisNs = namespaces.find((n) => n.id === namespaceId);
+                const thisRoom = thisNs?.rooms.find((r) => r.roomTitle === roomTitle);
+                const thisRoomsHistory = thisRoom?.history || [];
 
                 // leave all rooms, because the client can only be in one room at a time
                 const rooms = socket.rooms;
@@ -61,7 +64,7 @@ namespaces.forEach((ns) => {
 
                 // fetch the history and send it straight back on the ack
                 const room = ns.rooms.find((r) => r.roomTitle === roomTitle);
-                ackCallBack({ numUsers: socketCount });
+                ackCallBack({ numUsers: socketCount, history: room?.history || [] });
             });
 
             socket.on('newMessageToRoom', (message) => {
@@ -75,6 +78,12 @@ namespaces.forEach((ns) => {
                 if (!currentRoom) return;
                 // //send out this message to everyone including the sender
                 io.of(ns.endpoint).in(currentRoom).emit('newMessageToRoom', message);
+
+                // add this message to the history of the room
+                const thisNs = namespaces.find((n) => n.id === message.namespaceId);
+                const thisRoom = thisNs?.rooms.find((r) => r.roomTitle === currentRoom);
+                console.log('thisRoom: ', thisRoom);
+                thisRoom?.addMessage(message);
             });
         },
     );

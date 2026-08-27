@@ -10,7 +10,10 @@ export interface ClientToServerEvents {
     /* An ack is declared as the LAST parameter of the handler signature.
        Client: emit('joinRoom', data, (ack) => ...)
        Server: socket.on('joinRoom', (data, ack) => ack(...)) */
-    joinRoom: (data: { roomTitle: string }, ack: (response: { numUsers: number }) => void) => void;
+    joinRoom: (
+        data: { roomTitle: string; namespaceId: number },
+        ack: (response: { numUsers: number; history: MessageData[] }) => void,
+    ) => void;
 }
 
 export interface ServerToClientEvents {
