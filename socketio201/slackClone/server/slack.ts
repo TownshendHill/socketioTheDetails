@@ -23,7 +23,11 @@ app.get('/change-ns', (req, res) => {
 
 // Server side: we LISTEN to client events, we EMIT server events.
 io.on('connection', (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
+    console.log('===================================');
+    console.log(socket.handshake);
     console.log('New client connected: ' + socket.id);
+
+    const userName = socket.handshake.query.userName;
 
     socket.emit('welcome', { text: 'Welcome to the server!' });
 

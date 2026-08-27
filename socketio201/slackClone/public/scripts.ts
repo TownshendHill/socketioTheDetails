@@ -10,8 +10,22 @@ import { buildMessageHtml } from './buildMessageHtml.ts';
 const userName = 'Rob';
 const password = '1234';
 
+const clientOptions = {
+    query: {
+        userName,
+        password,
+    },
+    auth: {
+        userName,
+        password,
+    },
+};
+
 // always join the main namespace, because that is the source for other namespaces.
-const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000');
+const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+    'http://localhost:9000',
+    clientOptions,
+);
 // const socket2: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000/wiki');
 // const socket3: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000/mozilla');
 // const socket4: Socket<ServerToClientEvents, ClientToServerEvents> = io('http://localhost:9000/linux');
