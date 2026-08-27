@@ -38,12 +38,30 @@ namespaces.forEach((ns) => {
     io.of(ns.endpoint).on(
         'connection',
         (socket: Socket<ClientToServerEvents, ServerToClientEvents>) => {
-            socket.on('joinRoom', ({ roomTitle }) => {
-                // need to fetch the history
+            socket.on('joinRoom', async ({ roomTitle }, ackCallBack) => {
                 console.log('Server on joinRoom: ', roomTitle);
+
+                // leave all rooms, because the client can only be in one room at a time
+                const rooms = socket.rooms;
+                let i = 0;
+                rooms.forEach((room) => {
+                    // we don't want to leave the socket's personal room which is guaranteed to be the first one in the set, so we skip it
+                    if (i > 0) {
+                        socket.leave(room);
+                    }
+                    i++;
+                });
 
                 // join the room
                 socket.join(roomTitle);
+
+                // fetch the number of sockets in this room
+                const sockets = await io.of(ns.endpoint).in(roomTitle).fetchSockets();
+                const socketCount = sockets.length;
+
+                // fetch the history and send it straight back on the ack
+                const room = ns.rooms.find((r) => r.roomTitle === roomTitle);
+                ackCallBack({ numUsers: socketCount });
             });
         },
     );
