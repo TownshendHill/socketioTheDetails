@@ -1,4 +1,9 @@
 
+// mouse direction, written by the mousemove handler below.
+// These were implicit globals before - modules and strict mode both forbid that.
+let xVector = 0.1;
+let yVector = 0.1;
+
 // player.locX = Math.floor(500 * Math.random() + 10); // horizontal axis
 // player.locY = Math.floor(500 * Math.random() + 10); // vertical axis
 

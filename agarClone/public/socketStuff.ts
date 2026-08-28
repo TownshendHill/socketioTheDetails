@@ -35,10 +35,10 @@ const init = async()=>{
     })
 
     socket.on('playerAbsorbed', absorbData=>{
-        document.querySelector('#game-message').innerHTML = `${absorbData.absorbed} was absorbed by ${absorbData.absorbedBy}`
-        document.querySelector('#game-message').style.opacity = 1;
+        document.querySelector('#game-message').innerHTML = `${absorbData.absorbed} was absorbed by ${absorbData.absorbedBy}`;
+        (document.querySelector('#game-message') as HTMLElement).style.opacity = '1';
         window.setTimeout(()=>{
-            document.querySelector('#game-message').style.opacity = 0;
+            (document.querySelector('#game-message') as HTMLElement).style.opacity = '0';
         },2000)
     })
 

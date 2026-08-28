@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    /* Node runs .ts directly by stripping types, so we never emit.
+       tsc is used purely as a type checker: npm run typecheck */
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+
+    /* Match how Node actually resolves ESM */
+    "target": "es2023",
+    "lib": ["es2023"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+
+    /* Node can only ERASE types, not transform them. This flags any syntax
+       that would need real compilation (enums, namespaces, parameter properties). */
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+
+    /* Converted from plain JS — start permissive, tighten later. */
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "public"]
+}

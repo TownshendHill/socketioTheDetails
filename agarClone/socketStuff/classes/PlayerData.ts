@@ -1,6 +1,15 @@
 // This is where all the data that EVERYONE needs to know about everyone else
 
 class PlayerData{
+    name: string;
+    locX: number;
+    locY: number;
+    radius: number;
+    color: string;
+    score: number;
+    orbsAbsorbed: number;
+    playersAbsorbed: number;
+
     constructor(playerName,settings){
         this.name = playerName;
         this.locX = Math.floor(settings.worldWidth * Math.random() + 10); // horizontal axis

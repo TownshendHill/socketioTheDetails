@@ -2,11 +2,13 @@
   "name": "agarclone",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "node index.js",
-    "dev": "node --watch index.js"
+    "start": "node index.ts",
+    "dev": "concurrently -n build,server -c cyan,green \"npm:build:client -- --watch\" \"node --watch index.ts\"",
+    "build:client": "esbuild public/uiStuff.ts public/canvasStuff.ts public/socketStuff.ts --outdir=public --format=iife",
+    "typecheck": "tsc --noEmit && tsc -p public --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +18,11 @@
     "bcrypt": "^6.0.0",
     "express": "^5.2.1",
     "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "concurrently": "^10.0.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
   }
 }

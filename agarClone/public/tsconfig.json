@@ -1,0 +1,20 @@
+{
+  /* Browser-side config. It lives INSIDE public/ so VS Code finds it — the editor
+     walks up from an open file looking for a file named exactly "tsconfig.json",
+     and never reads a differently-named one.
+
+     These files are classic scripts, not modules: no import/export, so their
+     top-level declarations are shared across all three files, in the editor and
+     at runtime alike, via the <script> tags in index.html. */
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "es2023",
+    "lib": ["es2023", "dom"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "types": [],
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": ["**/*.ts"]
+}

@@ -1,13 +1,13 @@
 //Where all our socket stuff will go
 //oh... we need express, get app, but only put what we need to inside of our socket stuff
-import { app, io } from '../servers.js';
-import { checkForOrbCollisions, checkForPlayerCollisions } from './checkCollisions.js';
+import { app, io } from '../servers.ts';
+import { checkForOrbCollisions, checkForPlayerCollisions } from './checkCollisions.ts';
 
 //================CLASSES================
-import Player from './classes/Player.js';
-import PlayerConfig from './classes/PlayerConfig.js';
-import PlayerData from './classes/PlayerData.js';
-import Orb from './classes/Orb.js';
+import Player from './classes/Player.ts';
+import PlayerConfig from './classes/PlayerConfig.ts';
+import PlayerData from './classes/PlayerData.ts';
+import Orb from './classes/Orb.ts';
 //=======================================
 
 //make an orbs array that will host all 500/5000 NOT PLAYER orbs.
@@ -32,7 +32,7 @@ initGame();
 
 io.on('connect',(socket)=>{
     // a player has connected
-    let player = {};
+    let player = {} as Player;
     socket.on('init',(playerObj,ackCallback)=>{
 
         if(players.length === 0){ //someone is about to be added to players. Start tick-tocking
