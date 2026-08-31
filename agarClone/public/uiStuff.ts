@@ -43,7 +43,18 @@ window.addEventListener('load', () => {
 document.querySelector('.name-form')?.addEventListener('submit', (event) => {
     event.preventDefault();
     player.name = (document.querySelector('#name-input') as HTMLInputElement).value;
+    document.querySelector('.player-name')!.innerHTML = player.name;
     loginModal.hide();
     spawnModal.show();
     console.log(player);
+});
+
+document.querySelector('.start-game').addEventListener('click', () => {
+    // hide the start modal
+    spawnModal.hide();
+
+    // show the hiddenOnStart elements
+    const elArray = Array.from(document.querySelectorAll('.hiddenOnStart'));
+    elArray.forEach(el => (el as HTMLElement).removeAttribute('hidden'));
+    init();
 });
