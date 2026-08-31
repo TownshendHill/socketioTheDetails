@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node index.ts",
     "dev": "concurrently -n build,server -c cyan,green \"npm:build:client -- --watch\" \"node --watch index.ts\"",
-    "build:client": "esbuild public/uiStuff.ts public/canvasStuff.ts public/socketStuff.ts --outdir=public/dist --format=iife",
+    "build:client": "esbuild public/uiStuff.ts public/canvasStuff.ts public/socketStuff.ts --outdir=public/dist",
     "typecheck": "tsc --noEmit && tsc -p public --noEmit"
   },
   "keywords": [],

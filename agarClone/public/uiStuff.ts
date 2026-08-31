@@ -3,7 +3,7 @@
 declare const io: any;
 declare const bootstrap: any;
 
-// set heigh and width of canvas = windo
+// set heigh and width of canvas = window
 let wHeight = window.innerHeight;
 let wWidth = window.innerWidth;
 
