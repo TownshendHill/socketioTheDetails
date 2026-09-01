@@ -1,4 +1,3 @@
-
 // Globals provided by <script> tags in index.html, not by our own code.
 declare const io: any;
 declare const bootstrap: any;
@@ -33,7 +32,7 @@ let orbs: any[] = [];
 let players: any[] = [];
 
 // put the modals in variables so we can interact with them
-const loginModal = new bootstrap.Modal(document.querySelector('#loginModal') as HTMLElement); 
+const loginModal = new bootstrap.Modal(document.querySelector('#loginModal') as HTMLElement);
 const spawnModal = new bootstrap.Modal(document.querySelector('#spawnModal') as HTMLElement);
 
 window.addEventListener('load', () => {
@@ -55,6 +54,6 @@ document.querySelector('.start-game').addEventListener('click', () => {
 
     // show the hiddenOnStart elements
     const elArray = Array.from(document.querySelectorAll('.hiddenOnStart'));
-    elArray.forEach(el => (el as HTMLElement).removeAttribute('hidden'));
+    elArray.forEach((el) => (el as HTMLElement).removeAttribute('hidden'));
     init();
 });

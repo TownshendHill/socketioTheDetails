@@ -1,6 +1,6 @@
 // This is where all the data that EVERYONE needs to know about everyone else
 
-class PlayerData{
+class PlayerData {
     name: string;
     locX: number;
     locY: number;
@@ -10,7 +10,7 @@ class PlayerData{
     orbsAbsorbed: number;
     playersAbsorbed: number;
 
-    constructor(playerName,settings){
+    constructor(playerName, settings) {
         this.name = playerName;
         this.locX = Math.floor(settings.worldWidth * Math.random() + 10); // horizontal axis
         this.locY = Math.floor(settings.worldHeight * Math.random() + 10); // vertical axis
@@ -21,14 +21,13 @@ class PlayerData{
         this.playersAbsorbed = 0;
     }
 
-    getRandomColor(){
-        const r = Math.floor((Math.random() * 200) + 50)
-        const g = Math.floor((Math.random() * 200) + 50)
-        const b = Math.floor((Math.random() * 200) + 50)
+    getRandomColor() {
+        const r = Math.floor(Math.random() * 200 + 50);
+        const g = Math.floor(Math.random() * 200 + 50);
+        const b = Math.floor(Math.random() * 200 + 50);
         //rbg(112,243,59)
-        return `rgb(${r},${g},${b})`
+        return `rgb(${r},${g},${b})`;
     }
-
 }
 
 export default PlayerData;

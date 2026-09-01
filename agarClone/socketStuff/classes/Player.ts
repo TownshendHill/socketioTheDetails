@@ -1,11 +1,11 @@
 // this is where ALL the data is stored about a given player
 
-class Player{
+class Player {
     socketId: string;
     playerConfig: any;
     playerData: any;
 
-    constructor(socketId,playerConfig,playerData){
+    constructor(socketId, playerConfig, playerData) {
         this.socketId = socketId;
         this.playerConfig = playerConfig;
         this.playerData = playerData;

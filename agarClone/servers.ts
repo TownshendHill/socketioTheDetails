@@ -12,8 +12,6 @@ app.use(express.static(path.join(import.meta.dirname, 'public')));
 const expressServer = app.listen(9000);
 const io = new Server(expressServer);
 
-
-
 // App organization
 // servers.js is NOT the entry point. it creates our servers
 // and exports them
