@@ -25,7 +25,10 @@ interface PlayerState {
 }
 
 // player info
-const player: PlayerState = {};
+const player: PlayerState = {
+    locX: Math.floor(500 * Math.random() + 10), // horizontal axis
+    locY: Math.floor(500 * Math.random() + 10), // vertical axis
+};
 
 // shared with canvasStuff.ts and socketStuff.ts
 let orbs: any[] = [];
