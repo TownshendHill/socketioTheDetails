@@ -6,7 +6,7 @@ class PlayerConfig {
     speed: number;
     zoom: number;
 
-    constructor(settings) {
+    constructor(settings: { defaultSpeed: number; defaultZoom: number }) {
         this.xVector = 0;
         this.yVector = 0;
         this.speed = settings.defaultSpeed;

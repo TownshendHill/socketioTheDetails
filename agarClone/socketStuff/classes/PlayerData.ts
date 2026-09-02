@@ -10,7 +10,10 @@ class PlayerData {
     orbsAbsorbed: number;
     playersAbsorbed: number;
 
-    constructor(playerName, settings) {
+    constructor(
+        playerName: string,
+        settings: { worldWidth: number; worldHeight: number; defaultSize: number },
+    ) {
         this.name = playerName;
         this.locX = Math.floor(settings.worldWidth * Math.random() + 10); // horizontal axis
         this.locY = Math.floor(settings.worldHeight * Math.random() + 10); // vertical axis
