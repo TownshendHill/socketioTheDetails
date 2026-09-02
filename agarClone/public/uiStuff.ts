@@ -1,6 +1,7 @@
 // Globals provided by <script> tags in index.html, not by our own code.
 declare const io: any;
 declare const bootstrap: any;
+declare const Orb: any;
 
 // set heigh and width of canvas = window
 let wHeight = window.innerHeight;

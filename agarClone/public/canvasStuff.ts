@@ -1,13 +1,15 @@
 const init = () => {
+    console.log('orbs: ', orbs);
     draw();
 };
 
 // draw
 const draw = () => {
-    // clear the canvas so we can redraw it, so we can draw on a clean slate each frame.
-    context.clearRect(0, 0, canvas.width, canvas.height);
     // reset the context translate back to default
     context.setTransform(1, 0, 0, 1, 0, 0);
+
+    // clear the canvas so we can redraw it, so we can draw on a clean slate each frame.
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
     // clamp the screen / vp to the players location (x, y)
     const camX = -player.locX + canvas.width / 2;
@@ -24,14 +26,18 @@ const draw = () => {
     // arg4 = where to start drawing in radians (0 = 3 o'clock position)
     // arg5 = where to stop drawing in radians (usually Math.PI * 2 for a full circle)
     context.arc(player.locX, player.locY, 10, 0, Math.PI * 2);
-    context.arc(200, 200, 10, 0, Math.PI * 2);
 
     context.fill();
     context.lineWidth = 3;
     context.strokeStyle = 'rgb(0, 255, 0)';
     context.stroke();
 
-    console.log(player.locX, player.locY);
+    orbs.forEach((orb) => {
+        context.beginPath(); // this will start a new path
+        context.fillStyle = orb.color;
+        context.arc(orb.locX, orb.locY, orb.radius, 0, Math.PI * 2);
+        context.fill();
+    });
 
     // rAF is like a controlled loop
     // it runs recursively, every paint/frame. If the frame rate is 60fps, it will run 60 times per second.

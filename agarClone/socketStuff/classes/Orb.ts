@@ -4,7 +4,15 @@ class Orb {
     locY: number;
     radius: number;
 
-    constructor(settings) {
+    // Defaults so `new Orb()` works before the lesson introduces a shared
+    // settings object. Passing one later still works and overrides these.
+    constructor(
+        settings: { worldWidth: number; worldHeight: number; defaultGenericOrbSize: number } = {
+            worldWidth: 5000,
+            worldHeight: 5000,
+            defaultGenericOrbSize: 5,
+        },
+    ) {
         this.color = this.getRandomColor();
         this.locX = Math.floor(Math.random() * settings.worldWidth);
         this.locY = Math.floor(Math.random() * settings.worldHeight);
