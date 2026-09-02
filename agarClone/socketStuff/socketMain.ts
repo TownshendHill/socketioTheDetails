@@ -18,23 +18,31 @@ const settings = {
     worldHeight: 500,
     defaultGenericOrbSize: 5, // smaller than player orbs
 };
+const players: Player[] = [];
 
 // on server start, to make our initial defaultNumberOfOrbs
 initGame();
 
 io.on('connection', (socket) => {
-    // a player has connected
-    // make a playerConfig object - the data specific to the player that only the player needs to know
-    const playerName = 'Rob';
-    const playerConfig = new PlayerConfig(settings);
-    const playerData = new PlayerData(playerName, settings);
-    const player = new Player(socket.id, playerConfig, playerData);
-    // make a playerData object - the data specific to the player that all players need to know
-    // a master player object to house both
-    // event that runs on join that does init game stuff
     console.log('OnConnect');
-    socket.emit('init', {
-        orbs,
+
+    // a player has connected
+    socket.on('init', (playerObj, ack) => {
+        console.log('Player init data received: ', playerObj);
+
+        // make a playerConfig object - the data specific to the player that only the player needs to know
+        const playerName = playerObj.playerName;
+        const playerConfig = new PlayerConfig(settings);
+        const playerData = new PlayerData(playerName, settings);
+        const player = new Player(socket.id, playerConfig, playerData);
+        players.push(player);
+
+        // make a playerData object - the data specific to the player that all players need to know
+        // a master player object to house both
+        // event that runs on join that does init game stuff
+        ack({
+            orbs, // send the orbs array back as an ack function
+        });
     });
 });
 

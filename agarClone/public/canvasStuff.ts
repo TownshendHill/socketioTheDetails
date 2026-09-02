@@ -1,8 +1,3 @@
-const init = () => {
-    console.log('orbs: ', orbs);
-    draw();
-};
-
 // draw
 const draw = () => {
     // reset the context translate back to default
