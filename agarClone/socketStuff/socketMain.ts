@@ -98,6 +98,9 @@ io.on('connection', (socket) => {
 
             // emit to all sockets playing the game, the orbSwtich event so it can update orbs... just the new orbs
             io.to('game').emit('orbSwitch', orbData);
+
+            // emit to all sockets playing the game, the updateLeaderBoard event so it can update the leaderboard... cause someone just scored
+            io.to('game').emit('updateLeaderBoard', getLeaderBoard()); // send the event to the 'game' room. not the entire namespace
         }
 
         // player collisions - check for the tocking player to hit other players
@@ -111,6 +114,7 @@ io.on('connection', (socket) => {
 
         if (absorbData) {
             io.to('game').emit('playerAbsorbed', absorbData); // send the event to the 'game' room. not the entire namespace
+            io.to('game').emit('updateLeaderBoard', getLeaderBoard()); // send the event to the 'game' room. not the entire namespace
         }
     });
 
@@ -125,4 +129,15 @@ function initGame() {
     for (let i = 0; i < settings.defaultNumberOfOrbs; i++) {
         orbs.push(new Orb(settings));
     }
+}
+
+function getLeaderBoard() {
+    // absorbed players are {} in the array, so drop them rather than mapping
+    // them to an entry with no name or score
+    return players
+        .filter((curPlayer) => curPlayer.playerData)
+        .map((curPlayer) => ({
+            name: curPlayer.playerData.name,
+            score: curPlayer.playerData.score,
+        }));
 }

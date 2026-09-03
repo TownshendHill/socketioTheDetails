@@ -13,7 +13,7 @@
     "module": "preserve",
     "moduleResolution": "bundler",
     "types": [],
-    "strict": false,
+    "strict": true,
     "skipLibCheck": true
   },
   "include": ["**/*.ts", "../contract/**/*.ts"]

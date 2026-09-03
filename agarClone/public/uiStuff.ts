@@ -16,18 +16,23 @@ canvas.height = wHeight;
 
 // shape of the local player - loose for now, the course fills it in
 interface PlayerState {
-    name?: string;
-    locX?: number;
-    locY?: number;
-    xVector?: number;
-    yVector?: number;
+    name: string;
+    locX: number;
+    locY: number;
+    xVector: number;
+    yVector: number;
+    /** genuinely absent until the init ack arrives - everything else has a
+        starting value, so only this one stays optional */
     indexInPlayers?: number;
 }
 
 // player info
 const player: PlayerState = {
+    name: '',
     locX: Math.floor(500 * Math.random() + 10), // horizontal axis
     locY: Math.floor(500 * Math.random() + 10), // vertical axis
+    xVector: 0.1,
+    yVector: 0.1,
 };
 
 // shared with canvasStuff.ts and socketStuff.ts
@@ -51,7 +56,7 @@ document.querySelector('.name-form')?.addEventListener('submit', (event) => {
     console.log(player);
 });
 
-document.querySelector('.start-game').addEventListener('click', () => {
+document.querySelector('.start-game')!.addEventListener('click', () => {
     // hide the start modal
     spawnModal.hide();
 

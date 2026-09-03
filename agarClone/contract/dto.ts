@@ -70,6 +70,7 @@ declare global {
         tick: (players: PlayerDtoOrGone[]) => void;
         orbSwitch: (orbData: { capturedOrbI: number; newOrb: OrbData }) => void;
         playerAbsorbed: (absorbData: PlayerAbsorbedPayload) => void;
+        updateLeaderBoard: (leaderBoard: { name: string; score: number }[]) => void;
     }
 
     /** The browser gets `io` from a <script> tag, not an import, so the client
