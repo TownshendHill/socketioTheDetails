@@ -32,7 +32,7 @@ const player: PlayerState = {
 
 // shared with canvasStuff.ts and socketStuff.ts
 let orbs: OrbData[] = [];
-let players: PlayerDto[] = [];
+let players: PlayerDtoOrGone[] = [];
 
 // put the modals in variables so we can interact with them
 const loginModal = new bootstrap.Modal(document.querySelector('#loginModal') as HTMLElement);

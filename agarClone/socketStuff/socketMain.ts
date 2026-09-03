@@ -5,6 +5,7 @@ import Orb from './classes/Orb.ts';
 import Player from './classes/Player.ts';
 import PlayerConfig from './classes/PlayerConfig.ts';
 import PlayerData from './classes/PlayerData.ts';
+import { checkForOrbCollisions, checkForPlayerCollisions } from './checkCollisions.ts';
 
 // make an orb array that will host all 500/5000 NOT PLAYER orbs
 // every time an orb is absorbed, the server will create a new one
@@ -69,16 +70,47 @@ io.on('connection', (socket) => {
         const xV = (player.playerConfig.xVector = data.xVector);
         const yV = (player.playerConfig.yVector = data.yVector);
 
-        if ((player.playerData.locX < 5 && xV < 0) || (player.playerData.locX > 500 && xV > 0)) {
-            player.playerData.locY -= speed * yV;
-        } else if (
-            (player.playerData.locY < 5 && yV > 0) ||
-            (player.playerData.locY > 500 && yV < 0)
-        ) {
+        if ((player.playerData.locX > 5 && xV < 0) || (player.playerData.locX < 500 && xV > 0)) {
             player.playerData.locX += speed * xV;
-        } else {
-            player.playerData.locX += speed * xV;
+        }
+
+        if ((player.playerData.locY > 5 && yV > 0) || (player.playerData.locY < 500 && yV < 0)) {
             player.playerData.locY -= speed * yV;
+        }
+
+        // check for the tocking player to hit orbs
+        const capturedOrbI = checkForOrbCollisions(
+            player.playerData,
+            player.playerConfig,
+            orbs,
+            settings,
+        );
+
+        if (capturedOrbI !== null) {
+            // remove the orb from the orbs array and make a new one
+            orbs.splice(capturedOrbI, 1, new Orb(settings));
+
+            // now update the clients with the new orb
+            const orbData = {
+                capturedOrbI,
+                newOrb: orbs[capturedOrbI],
+            };
+
+            // emit to all sockets playing the game, the orbSwtich event so it can update orbs... just the new orbs
+            io.to('game').emit('orbSwitch', orbData);
+        }
+
+        // player collisions - check for the tocking player to hit other players
+        const absorbData = checkForPlayerCollisions(
+            player.playerData,
+            player.playerConfig,
+            players,
+            playersForUsers,
+            socket.id,
+        );
+
+        if (absorbData) {
+            io.to('game').emit('playerAbsorbed', absorbData); // send the event to the 'game' room. not the entire namespace
         }
     });
 

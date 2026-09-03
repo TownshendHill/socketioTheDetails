@@ -23,8 +23,18 @@ const init = async () => {
 
 // the server sends out the location/data of all player 30 times per second
 socket.on('tick', (playersArray) => {
-    console.log('onTick: ', playersArray);
+    // console.log('onTick: ', playersArray);
     players = playersArray;
     player.locX = players[player.indexInPlayers!].playerData.locX;
     player.locY = players[player.indexInPlayers!].playerData.locY;
+});
+
+socket.on('orbSwitch', (orbData) => {
+    // the server just told us that an orb was observed, replace it in the orbs array
+    console.log('onOrbSwitch: ', orbData);
+    orbs.splice(orbData.capturedOrbI, 1, orbData.newOrb);
+});
+
+socket.on('playerAbsorbed', (absorbData) => {
+    console.log('onPlayerAbsorbed: ', absorbData);
 });

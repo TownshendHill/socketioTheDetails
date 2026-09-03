@@ -16,6 +16,10 @@ const draw = () => {
     // draw all the players
 
     players.forEach((p) => {
+        // absorbed players are replaced with {} on the server so the array
+        // indexes stay stable (indexInPlayers depends on them). Skip the holes.
+        if (!p.playerData) return;
+
         context.beginPath();
         context.fillStyle = 'rgb(255, 0, 0)';
 
