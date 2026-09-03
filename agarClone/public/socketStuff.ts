@@ -7,6 +7,11 @@ const init = async () => {
         playerName: player.name,
     });
 
+    // our await has resolved, so start "tocking"
+    setInterval(() => {
+        socket.emit('tock', { xVector: player.xVector, yVector: player.yVector });
+    }, 1000 / 30); // 60 times per second
+
     console.log('orbs: ', initOrbs);
     orbs = initOrbs.orbs;
     draw();

@@ -38,6 +38,8 @@ declare global {
         acknowledgement is declared as the LAST parameter. */
     interface ClientToServerEvents {
         init: (playerObj: { playerName: string }, ack: (res: { orbs: OrbData[] }) => void) => void;
+        /** sent ~30x/sec: the direction the player wants to move, not a position */
+        tock: (data: { xVector: number; yVector: number }) => void;
     }
 
     interface ServerToClientEvents {
@@ -56,10 +58,7 @@ declare global {
             ev: Ev,
             ...args: Parameters<ClientToServerEvents[Ev]>
         ): void;
-        on<Ev extends keyof ServerToClientEvents>(
-            ev: Ev,
-            listener: ServerToClientEvents[Ev],
-        ): void;
+        on<Ev extends keyof ServerToClientEvents>(ev: Ev, listener: ServerToClientEvents[Ev]): void;
     }
 
     /** One entry of the `tick` payload. Only playerData crosses the wire —
