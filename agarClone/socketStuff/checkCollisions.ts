@@ -53,8 +53,8 @@ const checkForPlayerCollisions = (
     pConfig: PlayerConfig,
     // absorbed players are replaced with {} rather than removed, so index
     // alignment between the two arrays is preserved
-    players: (Player | Record<string, never>)[],
-    playersForUsers: (PlayerDto | Record<string, never>)[],
+    players: Partial<Player>[],
+    playersForUsers: PlayerDtoOrGone[],
     playerId: string,
 ) => {
     //PLAYER COLLISIONS
@@ -62,6 +62,9 @@ const checkForPlayerCollisions = (
         const p = players[i];
         if (p.socketId && p.socketId != playerId) {
             //Added p.socketId test in case player has been removed from players
+            // a removed player is {}, so playerData is undefined too - restate it
+            // here so the compiler knows the dereferences below are safe
+            if (!p.playerData) continue;
             let pLocx = p.playerData.locX;
             let pLocy = p.playerData.locY;
             let pR = p.playerData.radius;

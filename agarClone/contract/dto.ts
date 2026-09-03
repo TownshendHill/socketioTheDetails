@@ -96,5 +96,5 @@ declare global {
 
     /** An absorbed player is replaced with {} rather than removed, so array
         indexes stay stable. Anything reading a tick entry must handle the hole. */
-    type PlayerDtoOrGone = PlayerDto | Record<string, never>;
+    type PlayerDtoOrGone = Partial<PlayerDto>;
 }

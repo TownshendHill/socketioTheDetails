@@ -19,10 +19,12 @@ const settings = {
     worldHeight: 500,
     defaultGenericOrbSize: 5, // smaller than player orbs
 };
-const players: Player[] = [];
+// absorbed or disconnected players are replaced with {} rather than removed,
+// so the array indexes stay stable (indexInPlayers depends on them)
+const players: Partial<Player>[] = [];
 // sent to clients: only what everyone needs to know. No playerConfig - that is
 // server-side only (speed, zoom, vectors).
-const playersForUsers: PlayerDto[] = [];
+const playersForUsers: PlayerDtoOrGone[] = [];
 let tickTockInterval: NodeJS.Timeout;
 
 // on server start, to make our initial defaultNumberOfOrbs
@@ -120,6 +122,14 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('onDisconnect');
+        // loop through players and find the player wiht THIS players socketId, and splice that player out
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].socketId === socket.id) {
+                players.splice(i, 1, {});
+                playersForUsers.splice(i, 1, {});
+                break;
+            }
+        }
 
         if (players.length === 0) clearInterval(tickTockInterval); // stop the tick-tock if there are no players left
     });
@@ -135,7 +145,7 @@ function getLeaderBoard() {
     // absorbed players are {} in the array, so drop them rather than mapping
     // them to an entry with no name or score
     return players
-        .filter((curPlayer) => curPlayer.playerData)
+        .filter((curPlayer): curPlayer is Player => curPlayer.playerData !== undefined)
         .map((curPlayer) => ({
             name: curPlayer.playerData.name,
             score: curPlayer.playerData.score,
