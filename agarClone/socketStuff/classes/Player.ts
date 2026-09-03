@@ -9,6 +9,8 @@ class Player {
     socketId: string;
     playerConfig: PlayerConfig;
     playerData: PlayerData;
+    /** set false by checkForPlayerCollisions when this player is absorbed */
+    alive = true;
 
     constructor(socketId: string, playerConfig: PlayerConfig, playerData: PlayerData) {
         this.socketId = socketId;

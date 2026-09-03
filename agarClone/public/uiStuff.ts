@@ -1,7 +1,6 @@
 // Globals provided by <script> tags in index.html, not by our own code.
-declare const io: any;
+declare const io: { connect(url: string): ClientSocket };
 declare const bootstrap: any;
-declare const Orb: any;
 
 // set heigh and width of canvas = window
 let wHeight = window.innerHeight;
@@ -32,8 +31,8 @@ const player: PlayerState = {
 };
 
 // shared with canvasStuff.ts and socketStuff.ts
-let orbs: any[] = [];
-let players: any[] = [];
+let orbs: OrbData[] = [];
+let players: PlayerDto[] = [];
 
 // put the modals in variables so we can interact with them
 const loginModal = new bootstrap.Modal(document.querySelector('#loginModal') as HTMLElement);

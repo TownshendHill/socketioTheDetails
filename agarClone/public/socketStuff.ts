@@ -11,3 +11,8 @@ const init = async () => {
     orbs = initOrbs.orbs;
     draw();
 };
+
+socket.on('tick', (playersArray) => {
+    console.log('onTick: ', playersArray);
+    players = playersArray;
+});

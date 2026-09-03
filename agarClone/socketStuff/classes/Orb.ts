@@ -1,4 +1,4 @@
-class Orb {
+class Orb implements OrbData {
     color: string;
     locX: number;
     locY: number;

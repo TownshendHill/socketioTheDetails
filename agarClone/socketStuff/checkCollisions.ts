@@ -1,4 +1,14 @@
-const checkForOrbCollisions = (pData, pConfig, orbs, settings) => {
+import type PlayerConfig from './classes/PlayerConfig.ts';
+import type PlayerData from './classes/PlayerData.ts';
+import type Player from './classes/Player.ts';
+import type Orb from './classes/Orb.ts';
+
+const checkForOrbCollisions = (
+    pData: PlayerData,
+    pConfig: PlayerConfig,
+    orbs: Orb[],
+    settings: unknown,
+) => {
     //ORB COLLISIONS
     for (let i = 0; i < orbs.length; i++) {
         const orb = orbs[i];
@@ -38,7 +48,15 @@ const checkForOrbCollisions = (pData, pConfig, orbs, settings) => {
     return null;
 };
 
-const checkForPlayerCollisions = (pData, pConfig, players, playersForUsers, playerId) => {
+const checkForPlayerCollisions = (
+    pData: PlayerData,
+    pConfig: PlayerConfig,
+    // absorbed players are replaced with {} rather than removed, so index
+    // alignment between the two arrays is preserved
+    players: (Player | Record<string, never>)[],
+    playersForUsers: (PlayerDto | Record<string, never>)[],
+    playerId: string,
+) => {
     //PLAYER COLLISIONS
     for (let i = 0; i < players.length; i++) {
         const p = players[i];

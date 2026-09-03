@@ -13,19 +13,23 @@ const draw = () => {
     // translate moves the canvas / context to where the player is at
     context.translate(camX, camY);
 
-    context.beginPath();
-    context.fillStyle = 'rgb(255, 0, 0)';
+    // draw all the players
 
-    // arg1 and arg 2 are center x and y of the arc,
-    // arg3 is the radius,
-    // arg4 = where to start drawing in radians (0 = 3 o'clock position)
-    // arg5 = where to stop drawing in radians (usually Math.PI * 2 for a full circle)
-    context.arc(player.locX, player.locY, 10, 0, Math.PI * 2);
+    players.forEach((p) => {
+        context.beginPath();
+        context.fillStyle = 'rgb(255, 0, 0)';
 
-    context.fill();
-    context.lineWidth = 3;
-    context.strokeStyle = 'rgb(0, 255, 0)';
-    context.stroke();
+        // arg1 and arg 2 are center x and y of the arc,
+        // arg3 is the radius,
+        // arg4 = where to start drawing in radians (0 = 3 o'clock position)
+        // arg5 = where to stop drawing in radians (usually Math.PI * 2 for a full circle)
+        context.arc(p.playerData.locX, p.playerData.locY, p.playerData.radius, 0, Math.PI * 2);
+
+        context.fill();
+        context.lineWidth = 3;
+        context.strokeStyle = 'rgb(0, 255, 0)';
+        context.stroke();
+    });
 
     orbs.forEach((orb) => {
         context.beginPath(); // this will start a new path

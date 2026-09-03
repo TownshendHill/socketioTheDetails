@@ -19,6 +19,7 @@ const settings = {
     defaultGenericOrbSize: 5, // smaller than player orbs
 };
 const players: Player[] = [];
+let tickTockInterval: NodeJS.Timeout;
 
 // on server start, to make our initial defaultNumberOfOrbs
 initGame();
@@ -28,6 +29,14 @@ io.on('connection', (socket) => {
 
     // a player has connected
     socket.on('init', (playerObj, ack) => {
+        if (players.length === 0) {
+            // tick-tock - issue an event to every connected socket, that is playing the game, 30 times per second
+            tickTockInterval = setInterval(() => {
+                io.to('game').emit('tick', players); // send the event to the 'game' room. not the entire namespace
+            }, 1000 / 30); // 30 times per second or 1 of 30fps
+        }
+
+        socket.join('game'); // put the socket in the 'game' room, so we can send events to all players in the game
         console.log('Player init data received: ', playerObj);
 
         // make a playerConfig object - the data specific to the player that only the player needs to know
@@ -43,6 +52,12 @@ io.on('connection', (socket) => {
         ack({
             orbs, // send the orbs array back as an ack function
         });
+    });
+
+    socket.on('disconnect', () => {
+        console.log('onDisconnect');
+
+        if (players.length === 0) clearInterval(tickTockInterval); // stop the tick-tock if there are no players left
     });
 });
 
