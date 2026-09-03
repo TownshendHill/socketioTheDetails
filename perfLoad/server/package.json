@@ -1,17 +1,21 @@
 {
   "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "servers.js",
+  "private": true,
+  "type": "module",
+  "main": "servers.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node --watch servers.ts",
+    "start": "node servers.ts",
+    "typecheck": "tsc --noEmit",
+    "cluster:demo": "node clusterTest.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@socket.io/cluster-adapter": "^0.2.2",
-    "@socket.io/sticky": "^1.0.3",
-    "socket.io": "^4.6.1"
+    "@perf/contract": "*",
+    "@socket.io/cluster-adapter": "^0.3.0",
+    "@socket.io/sticky": "^2.0.1",
+    "socket.io": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0"
   }
 }

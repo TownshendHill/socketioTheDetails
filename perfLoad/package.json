@@ -1,0 +1,25 @@
+{
+  "name": "perfload",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "contract",
+    "server",
+    "nodeClient",
+    "react-client"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,node,react -c green,yellow,cyan \"npm:dev -w server\" \"npm:dev -w nodeClient\" \"npm:dev -w react-client\"",
+    "dev:server": "npm run dev -w server",
+    "dev:node": "npm run dev -w nodeClient",
+    "dev:react": "npm run dev -w react-client",
+    "build": "npm run build -w react-client",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "prettier": "^3.6.2",
+    "typescript": "^7.0.2"
+  }
+}
