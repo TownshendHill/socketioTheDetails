@@ -19,6 +19,9 @@ const settings = {
     defaultGenericOrbSize: 5, // smaller than player orbs
 };
 const players: Player[] = [];
+// sent to clients: only what everyone needs to know. No playerConfig - that is
+// server-side only (speed, zoom, vectors).
+const playersForUsers: PlayerDto[] = [];
 let tickTockInterval: NodeJS.Timeout;
 
 // on server start, to make our initial defaultNumberOfOrbs
@@ -33,7 +36,7 @@ io.on('connection', (socket) => {
         if (players.length === 0) {
             // tick-tock - issue an event to every connected socket, that is playing the game, 30 times per second
             tickTockInterval = setInterval(() => {
-                io.to('game').emit('tick', players); // send the event to the 'game' room. not the entire namespace
+                io.to('game').emit('tick', playersForUsers); // send the event to the 'game' room. not the entire namespace
             }, 1000 / 30); // 30 times per second or 1 of 30fps
         }
 
@@ -45,17 +48,23 @@ io.on('connection', (socket) => {
         const playerConfig = new PlayerConfig(settings);
         const playerData = new PlayerData(playerName, settings);
         player = new Player(socket.id, playerConfig, playerData);
-        players.push(player);
+        players.push(player); // server use only
+        playersForUsers.push({ playerData }); // client use only
 
         // make a playerData object - the data specific to the player that all players need to know
         // a master player object to house both
         // event that runs on join that does init game stuff
         ack({
             orbs, // send the orbs array back as an ack function
+            indexInPlayers: playersForUsers.length - 1, // send the index of the player in the playersForUsers array back as an ack function
         });
     });
 
     socket.on('tock', (data) => {
+        // a tock has come in before the player is set up
+        // this is because the client kept tocking after disconnect
+        if (!player.playerConfig) return;
+
         const speed = player.playerConfig.speed;
         const xV = (player.playerConfig.xVector = data.xVector);
         const yV = (player.playerConfig.yVector = data.yVector);

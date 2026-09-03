@@ -36,10 +36,28 @@ declare global {
     /** The event contract. Each entry is the signature of that event's HANDLER;
         Socket.IO derives the emit signature from its parameters. An
         acknowledgement is declared as the LAST parameter. */
+    /** client -> server: everything the client sends to join */
+    interface InitPayload {
+        playerName: string;
+    }
+
+    /** server -> client: the ack reply to 'init' */
+    interface InitAck {
+        orbs: OrbData[];
+        /** this player's index in the tick array, so the client can find itself */
+        indexInPlayers: number;
+    }
+
+    /** client -> server, ~30x/sec: the direction the player wants to move.
+        A direction, never a position - the server owns where you are. */
+    interface TockPayload {
+        xVector: number;
+        yVector: number;
+    }
+
     interface ClientToServerEvents {
-        init: (playerObj: { playerName: string }, ack: (res: { orbs: OrbData[] }) => void) => void;
-        /** sent ~30x/sec: the direction the player wants to move, not a position */
-        tock: (data: { xVector: number; yVector: number }) => void;
+        init: (playerObj: InitPayload, ack: (res: InitAck) => void) => void;
+        tock: (data: TockPayload) => void;
     }
 
     interface ServerToClientEvents {
