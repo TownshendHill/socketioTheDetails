@@ -14,7 +14,9 @@ export const Mem = ({ data }: MemProps) => {
     const totalMemInGB = Math.floor((totalMem / BYTES_PER_GB) * 100) / 100;
     const freeMemInGB = Math.floor((freeMem / BYTES_PER_GB) * 100) / 100;
 
-    useEffect(() => drawCircle(memRef.current, memUsage * 100), [memUsage]);
+    useEffect(() => {
+        drawCircle(memRef.current, memUsage * 100);
+    }, [memUsage]);
 
     return (
         <div className="mem col-3">

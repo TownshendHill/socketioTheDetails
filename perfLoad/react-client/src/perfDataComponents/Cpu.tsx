@@ -6,7 +6,9 @@ export const Cpu = ({ data }: { data: { cpuLoad: number } }) => {
 
     // drawing is a side effect, so it belongs in an effect rather than in the
     // render body - on the first render the ref is still null
-    useEffect(() => drawCircle(canvasEl.current, data.cpuLoad), [data.cpuLoad]);
+    useEffect(() => {
+        drawCircle(canvasEl.current, data.cpuLoad);
+    }, [data.cpuLoad]);
 
     return (
         <div className="cpu col-3">

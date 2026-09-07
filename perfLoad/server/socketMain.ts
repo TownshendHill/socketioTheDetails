@@ -12,7 +12,7 @@ export const socketMain = (io: Server<ClientToServerEvents, ServerToClientEvents
         console.log(`SocketMain - onConnect: ${socket.id}`);
         const auth = socket.handshake.auth;
         const token = auth.token;
-        console.log(`SocketMain - onConnect token: ${token}`);
+        // console.log(`SocketMain - onConnect token: ${token}`);
 
         if (token === NODE_CLIENT_TOKEN) {
             socket.join(ROOMS.nodeClient);
@@ -28,7 +28,11 @@ export const socketMain = (io: Server<ClientToServerEvents, ServerToClientEvents
         }
 
         socket.on('perfData', (data) => {
-            console.log(`OnPerfData, tick... ${socket.id}:`, data);
+            io.to(ROOMS.reactClient).emit('perfData', data);
+        });
+
+        socket.on('testConnection', (data) => {
+            console.log(`TestConnection received from ${socket.id}:`, data);
         });
     });
 };
