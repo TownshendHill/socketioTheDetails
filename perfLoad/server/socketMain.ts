@@ -12,6 +12,8 @@ export const socketMain = (io: Server<ClientToServerEvents, ServerToClientEvents
         console.log(`SocketMain - onConnect: ${socket.id}`);
         const auth = socket.handshake.auth;
         const token = auth.token;
+        // the machine this socket reports for - only known once perfData arrives
+        let machineMacA: string | undefined;
         // console.log(`SocketMain - onConnect token: ${token}`);
 
         if (token === NODE_CLIENT_TOKEN) {
@@ -28,11 +30,26 @@ export const socketMain = (io: Server<ClientToServerEvents, ServerToClientEvents
         }
 
         socket.on('perfData', (data) => {
+            console.log('Tick...');
+            if (!machineMacA) {
+                machineMacA = data.macA;
+                io.to(ROOMS.reactClient).emit('connectedOrNot', {
+                    machineMacA: socket.handshake.auth.macA,
+                    isAlive: true,
+                });
+            }
             io.to(ROOMS.reactClient).emit('perfData', data);
         });
 
         socket.on('testConnection', (data) => {
             console.log(`TestConnection received from ${socket.id}:`, data);
+        });
+
+        socket.on('disconnect', (reason) => {
+            io.to(ROOMS.reactClient).emit('connectedOrNot', {
+                machineMacA: socket.handshake.auth.macA,
+                isAlive: false,
+            });
         });
     });
 };

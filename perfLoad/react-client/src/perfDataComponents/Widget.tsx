@@ -24,7 +24,7 @@ export const Widget = ({ data }: { data: PerfData }) => {
     } = data;
 
     useEffect(() => {
-        // connectedOrNot is about the MONITORED machine, not about this browser.
+        // connectedOrNot is about the MONITORED machine nodeClient, not about this react client.
         // Only react to the one this widget is showing.
         const onConnectedOrNot = ({
             machineMacA,
