@@ -52,5 +52,7 @@ if (cluster.isPrimary) {
     io.adapter(createAdapter()); // replace the default in-memory adapter
     setupWorker(io); // connect this worker to the primary
 
+    // socketMain is OUR file where our emits and listens happens
+    // it needs the io object
     socketMain(io, process.pid);
 }

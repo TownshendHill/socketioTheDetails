@@ -9,6 +9,30 @@ import os from 'node:os';
 import { io, type Socket } from 'socket.io-client';
 import type { ClientToServerEvents, PerfReading, ServerToClientEvents } from '@perf/contract';
 
+const socket = io('http://localhost:3000'); // :3000 is where are server is listening
+socket.on('connect', () => {
+    console.log(`Connected to server with id: ${socket.id}`);
+    // we need a way to identify this machine to the server, for fe usage
+    const nI = os.networkInterfaces(); // a list of all network interfaces on this machine
+    let macA: string | undefined;
+    console.log('networkInterfaces: ', nI);
+
+    for (const key in nI) {
+        // networkInterfaces() returns Dict<...[]>, so nI[key] may be undefined -
+        // TypeScript cannot know the key exists just because the loop produced it
+        const firstAddress = nI[key]?.[0];
+        if (!firstAddress) continue;
+
+        const isInternetFacing = !firstAddress.internal;
+        if (isInternetFacing) {
+            // we have a macA we can use
+            macA = firstAddress.mac;
+            break;
+        }
+    }
+    console.log(`MAC Address: ${macA}`);
+});
+
 // what info do we need to know from node about performance
 // - CPU usage
 // - Network I/O
