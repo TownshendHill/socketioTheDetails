@@ -9,13 +9,19 @@ import os from 'node:os';
 import { io, type Socket } from 'socket.io-client';
 import type { ClientToServerEvents, PerfReading, ServerToClientEvents } from '@perf/contract';
 
-const socket = io('http://localhost:3000'); // :3000 is where are server is listening
+const NODE_CLIENT_TOKEN = '239rfaiskdfvq243EGa4q3wefsdad';
+
+const socket = io('http://localhost:3000', {
+    auth: {
+        token: NODE_CLIENT_TOKEN,
+    },
+}); // :3000 is where are server is listening
+
 socket.on('connect', () => {
     console.log(`Connected to server with id: ${socket.id}`);
     // we need a way to identify this machine to the server, for fe usage
     const nI = os.networkInterfaces(); // a list of all network interfaces on this machine
     let macA: string | undefined;
-    console.log('networkInterfaces: ', nI);
 
     for (const key in nI) {
         // networkInterfaces() returns Dict<...[]>, so nI[key] may be undefined -
@@ -31,6 +37,19 @@ socket.on('connect', () => {
         }
     }
     console.log(`MAC Address: ${macA}`);
+
+    const perfDataInterval = setInterval(async () => {
+        // every second call performance data and emit
+        const perfData = await performanceLoadData();
+
+        socket.emit('perfData', { ...perfData, macA: macA! });
+    }, 5000); // send performance data every second
+
+    socket.on('disconnect', () => {
+        // this includes disconnect
+        console.log(`Disconnected from server with id: ${socket.id}`);
+        clearInterval(perfDataInterval);
+    });
 });
 
 // what info do we need to know from node about performance
@@ -63,7 +82,7 @@ const cpuAverage = () => {
 // because the times property on cpis is time since boot, we will get now times, and 100ms fomr now times.
 // compare them, that will give us the current load
 const getCpuLoad = () =>
-    new Promise((resolve, reject) => {
+    new Promise<number>((resolve, reject) => {
         const start = cpuAverage();
 
         setTimeout(() => {
@@ -78,7 +97,7 @@ const getCpuLoad = () =>
     });
 
 const performanceLoadData = () =>
-    new Promise(async (resolve, reject) => {
+    new Promise<PerfReading>(async (resolve, reject) => {
         // - OS type
         const osType = os.type() === 'Darwin' ? 'Mac' : os.type();
         console.log('osType: ', osType);

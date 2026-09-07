@@ -3,20 +3,20 @@
 
 /** One reading from one monitored machine, sent once per second. */
 export interface PerfData {
-    /** identifies the machine - a MAC address plus a random suffix */
+    /** identifies the machine - its MAC address */
     macA: string;
     freeMem: number;
     totalMem: number;
     usedMem: number;
     /** 0..1, to two decimal places */
-    memUseage: number;
+    memUsage: number;
     osType: string;
     /** seconds since boot */
-    upTime: number;
+    uptime: number;
     cpuType: string;
     numCores: number;
     /** MHz */
-    cpuSpeed: number;
+    cpuClockSpeed: number;
     /** 0..100 */
     cpuLoad: number;
 }

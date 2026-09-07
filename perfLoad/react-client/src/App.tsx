@@ -27,6 +27,7 @@ export const App = () => {
 
     return (
         <div className="container">
+            <h1>Performance Dashboard</h1>
             {Object.values(performanceData).map((d) => (
                 <Widget data={d} key={d.macA} />
             ))}

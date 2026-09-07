@@ -9,9 +9,9 @@ interface InfoProps {
     data: {
         macA: string;
         osType: string;
-        upTime: number;
+        uptime: number;
         cpuType: string;
-        cpuSpeed: number;
+        cpuClockSpeed: number;
         numCores: number;
     };
 }
@@ -21,7 +21,7 @@ export const Info = ({ data }: InfoProps) => (
         <h3>Operating System</h3>
         <div className="widget-text">{data.osType}</div>
         <h3>Time Online</h3>
-        <div className="widget-text">{dayjs.duration(data.upTime, 'seconds').humanize()}</div>
+        <div className="widget-text">{dayjs.duration(data.uptime, 'seconds').humanize()}</div>
         <h3>Processor information</h3>
         <div className="widget-text">
             <strong>Type:</strong> {data.cpuType}
@@ -30,7 +30,7 @@ export const Info = ({ data }: InfoProps) => (
             <strong>Number of Cores:</strong> {data.numCores}
         </div>
         <div className="widget-text">
-            <strong>Clock Speed:</strong> {data.cpuSpeed}
+            <strong>Clock Speed:</strong> {data.cpuClockSpeed}
         </div>
     </div>
 );

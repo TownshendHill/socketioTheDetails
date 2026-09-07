@@ -13,12 +13,12 @@ export const Widget = ({ data }: { data: PerfData }) => {
         freeMem,
         totalMem,
         usedMem,
-        memUseage,
+        memUsage,
         osType,
-        upTime,
+        uptime,
         cpuType,
         numCores,
-        cpuSpeed,
+        cpuClockSpeed,
         cpuLoad,
         macA,
     } = data;
@@ -44,8 +44,8 @@ export const Widget = ({ data }: { data: PerfData }) => {
         <div className="widget row justify-content-evenly">
             {!isAlive && <div className="not-active">Offline</div>}
             <Cpu data={{ cpuLoad }} />
-            <Mem data={{ freeMem, totalMem, usedMem, memUseage }} />
-            <Info data={{ macA, osType, upTime, cpuType, cpuSpeed, numCores }} />
+            <Mem data={{ freeMem, totalMem, usedMem, memUsage }} />
+            <Info data={{ macA, osType, uptime, cpuType, cpuClockSpeed, numCores }} />
         </div>
     );
 };

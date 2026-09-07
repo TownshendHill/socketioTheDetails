@@ -9,6 +9,26 @@ const REACT_CLIENT_TOKEN = '23jrtiheriufyqwidsf';
 
 export const socketMain = (io: Server<ClientToServerEvents, ServerToClientEvents>, pid: number) => {
     io.on('connection', (socket) => {
-        console.log(`SocketMain - Client connected: ${socket.id}`);
+        console.log(`SocketMain - onConnect: ${socket.id}`);
+        const auth = socket.handshake.auth;
+        const token = auth.token;
+        console.log(`SocketMain - onConnect token: ${token}`);
+
+        if (token === NODE_CLIENT_TOKEN) {
+            socket.join(ROOMS.nodeClient);
+        }
+        if (token === REACT_CLIENT_TOKEN) {
+            socket.join(ROOMS.reactClient);
+        }
+
+        if (token !== NODE_CLIENT_TOKEN && token !== REACT_CLIENT_TOKEN) {
+            console.log(`Unauthorized client attempted to connect: ${socket.id}`);
+            socket.disconnect();
+            return;
+        }
+
+        socket.on('perfData', (data) => {
+            console.log(`OnPerfData, tick... ${socket.id}:`, data);
+        });
     });
 };
